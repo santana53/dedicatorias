@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Día a la Mejor Mujer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+        body {
+            background-color: #f7b7cf; /* Fondo rosado */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+            flex-direction: column;
+        }
+
+        /* Contenedor de la imagen del ramo */
+        .flower-image-container {
+            position: relative;
+            z-index: 1;
+            max-width: 300px; /* tamaño fijo más pequeño */
+            width: 80%; /* adaptable en móvil */
+            height: auto;
+            animation: bounceIn 2s ease-out;
+        }
+
+        .flower-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Animación de entrada de la imagen */
+        @keyframes bounceIn {
+            0%, 20%, 40%, 60%, 80%, 100% {
+                transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+            }
+            0% {
+                opacity: 0;
+                transform: scale3d(.3, .3, .3);
+            }
+            20% {
+                transform: scale3d(1.1, 1.1, 1.1);
+            }
+            40% {
+                transform: scale3d(.9, .9, .9);
+            }
+            60% {
+                opacity: 1;
+                transform: scale3d(1.03, 1.03, 1.03);
+            }
+            80% {
+                transform: scale3d(.97, .97, .97);
+            }
+            100% {
+                opacity: 1;
+                transform: scale3d(1, 1, 1);
+            }
+        }
+
+        /* --- Estilo y animación de los pétalos --- */
+        .falling-petals {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .petal {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #d14777;
+            border-radius: 50%;
+            animation: fall 15s linear infinite;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(var(--x) * 1px), 100vh) rotate(var(--deg));
+                opacity: 0;
+            }
+        }
+
+        /* --- Estilo y animación del mensaje --- */
+        .message-container {
+            margin-top: 20px;
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            color: #88004b;
+            font-size: clamp(1rem, 5vw, 2.2rem);
+            position: relative;
+            z-index: 2;
+        }
+
+        .message-text {
+            display: inline-block;
+            border-right: .15em solid #88004b; /* cursor */
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="flower-image-container">
+        <img src="https://i.postimg.cc/tJJ71nqj/ramo.png" alt="Ramo de flores" class="flower-image">
+    </div>
+
+    <div class="message-container">
+        <span class="message-text" id="typewriter"></span>
+    </div>
+    
+    <div class="falling-petals"></div>
+
+    <script>
+        // Texto a escribir
+        const text = "Feliz día a la mejor mujer que existe ❤️";
+        const typewriter = document.getElementById("typewriter");
+        let i = 0;
+
+        function typeEffect() {
+            if (i < text.length) {
+                typewriter.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeEffect, 100); // velocidad
+            } else {
+                typewriter.style.borderRight = "none"; // quitar cursor al final
+            }
+        }
+
+        setTimeout(typeEffect, 1500); // espera antes de empezar
+
+        // Pétalos cayendo
+        const petalColors = ['#d14777', '#f06292', '#e91e63', '#ad1457', '#9c27b0'];
+        const petalsContainer = document.querySelector('.falling-petals');
+
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.style.backgroundColor = petalColors[Math.floor(Math.random() * petalColors.length)];
+            petal.style.left = `${Math.random() * window.innerWidth}px`;
+            petal.style.animationDelay = `${Math.random() * 5}s`;
+            petal.style.animationDuration = `${10 + Math.random() * 5}s`;
+            petal.style.setProperty('--deg', `${Math.random() * 360}deg`);
+            petal.style.setProperty('--x', `${(Math.random() - 0.5) * 500}`);
+            petalsContainer.appendChild(petal);
+
+            setTimeout(() => petal.remove(), 20000);
+        }
+
+        setInterval(createPetal, 300);
+    </script>
+</body>
+</html>
